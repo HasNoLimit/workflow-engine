@@ -190,6 +190,46 @@ public class AgentServiceImpl extends ServiceImpl<AgentMapper, Agent> implements
     }
 
     /**
+     * 获取智能体详情（不存在时抛出异常）
+     * <p>
+     * 根据 ID 查询智能体，如果不存在则抛出 AgentNotFoundException
+     * </p>
+     *
+     * @param agentId 智能体ID
+     * @return 智能体
+     * @throws AgentNotFoundException 智能体不存在
+     */
+    @Override
+    public Agent getAgentById(Long agentId) {
+        Agent agent = getById(agentId);
+        if (agent == null) {
+            throw new AgentNotFoundException(agentId);
+        }
+        return agent;
+    }
+
+    /**
+     * 删除智能体（仅支持删除 INACTIVE 状态）
+     * <p>
+     * 业务规则：只能删除非活跃状态的智能体，活跃状态的智能体需要先停用
+     * </p>
+     *
+     * @param agentId 智能体ID
+     * @throws AgentNotFoundException 智能体不存在
+     * @throws IllegalStateException 智能体处于活跃状态
+     */
+    @Override
+    @Transactional
+    public void delete(Long agentId) {
+        Agent agent = getAgentById(agentId);
+        if (Agent.STATUS_ACTIVE.equals(agent.getStatus())) {
+            throw new IllegalStateException("无法删除活跃状态的智能体，请先停用");
+        }
+        removeById(agentId);
+        log.info("删除智能体: id={}", agentId);
+    }
+
+    /**
      * 验证智能体类型是否合法
      *
      * @param type 智能体类型

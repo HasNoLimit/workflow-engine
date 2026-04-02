@@ -62,14 +62,12 @@ public class AgentController {
      * 获取智能体详情
      *
      * @param agentId 智能体ID
-     * @return 智能体详情（404 如果不存在）
+     * @return 智能体详情
+     * @throws com.workflow.engine.exception.AgentNotFoundException 智能体不存在
      */
     @GetMapping("/{agentId}")
     public ResponseEntity<Agent> getById(@PathVariable Long agentId) {
-        Agent agent = agentService.getById(agentId);
-        if (agent == null) {
-            return ResponseEntity.notFound().build();
-        }
+        Agent agent = agentService.getAgentById(agentId);
         return ResponseEntity.ok(agent);
     }
 
@@ -147,15 +145,17 @@ public class AgentController {
     /**
      * 删除智能体
      * <p>
-     * 物理删除智能体（谨慎使用）
+     * 仅支持删除 INACTIVE 状态的智能体，活跃状态的智能体需先停用
      * </p>
      *
      * @param agentId 智能体ID
      * @return 204 No Content
+     * @throws com.workflow.engine.exception.AgentNotFoundException 智能体不存在
+     * @throws IllegalStateException 智能体处于活跃状态
      */
     @DeleteMapping("/{agentId}")
     public ResponseEntity<Void> delete(@PathVariable Long agentId) {
-        agentService.removeById(agentId);
+        agentService.delete(agentId);
         return ResponseEntity.noContent().build();
     }
 }

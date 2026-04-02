@@ -319,6 +319,50 @@ class AgentServiceTest {
         assertEquals("查询测试", found.getName());
     }
 
+    @Test
+    void shouldThrowWhenGetNonExistentAgent() {
+        // Then: 查询不存在的智能体应抛出 AgentNotFoundException
+        assertThrows(AgentNotFoundException.class, () -> {
+            agentService.getAgentById(999L);
+        });
+    }
+
+    @Test
+    void shouldThrowWhenDeleteActiveAgent() {
+        // Given: 创建并发布智能体
+        AgentCreateRequest createRequest = new AgentCreateRequest(
+            testWorkflow.getId(), testVersion.getVersion(), "测试", Agent.TYPE_DIALOG);
+        Agent agent = agentService.create(createRequest);
+        agentService.publish(agent.getId(), new AgentPublishRequest(null, 300));
+
+        // Then: 删除活跃智能体应抛出异常
+        assertThrows(IllegalStateException.class, () -> {
+            agentService.delete(agent.getId());
+        });
+    }
+
+    @Test
+    void shouldDeleteInactiveAgent() {
+        // Given: 创建智能体但不发布（INACTIVE状态）
+        AgentCreateRequest createRequest = new AgentCreateRequest(
+            testWorkflow.getId(), testVersion.getVersion(), "测试", Agent.TYPE_DIALOG);
+        Agent agent = agentService.create(createRequest);
+
+        // When: 删除
+        agentService.delete(agent.getId());
+
+        // Then: 应删除成功
+        assertNull(agentService.getById(agent.getId()));
+    }
+
+    @Test
+    void shouldThrowWhenDeleteNonExistentAgent() {
+        // Then: 删除不存在的智能体应抛出 AgentNotFoundException
+        assertThrows(AgentNotFoundException.class, () -> {
+            agentService.delete(999L);
+        });
+    }
+
     /**
      * 创建测试用的画布数据
      */

@@ -71,6 +71,26 @@ public class GlobalExceptionHandler {
     }
 
     /**
+     * 处理 IllegalStateException 异常，返回 400 响应
+     * <p>
+     * 用于业务规则验证失败的情况，如尝试删除活跃状态的智能体
+     * </p>
+     *
+     * @param e IllegalStateException 异常
+     * @return 包含错误信息的 ResponseEntity
+     */
+    @ExceptionHandler(IllegalStateException.class)
+    public ResponseEntity<Map<String, Object>> handleIllegalState(IllegalStateException e) {
+        log.warn("业务规则验证失败: {}", e.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+            .body(Map.of(
+                "error", "INVALID_OPERATION",
+                "message", e.getMessage(),
+                "timestamp", LocalDateTime.now()
+            ));
+    }
+
+    /**
      * Handles validation errors and returns 400 response.
      *
      * @param e the MethodArgumentNotValidException
