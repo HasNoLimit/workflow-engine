@@ -54,6 +54,23 @@ public class GlobalExceptionHandler {
     }
 
     /**
+     * 处理 AgentNotFoundException 异常，返回 404 响应
+     *
+     * @param e AgentNotFoundException 异常
+     * @return 包含错误信息的 ResponseEntity
+     */
+    @ExceptionHandler(AgentNotFoundException.class)
+    public ResponseEntity<Map<String, Object>> handleAgentNotFound(AgentNotFoundException e) {
+        log.warn("智能体未找到: {}", e.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+            .body(Map.of(
+                "error", "AGENT_NOT_FOUND",
+                "message", e.getMessage(),
+                "timestamp", LocalDateTime.now()
+            ));
+    }
+
+    /**
      * Handles validation errors and returns 400 response.
      *
      * @param e the MethodArgumentNotValidException

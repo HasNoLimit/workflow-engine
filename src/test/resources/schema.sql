@@ -19,3 +19,19 @@ CREATE TABLE IF NOT EXISTS workflow_version (
     change_note VARCHAR(500),
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
+
+-- 智能体表
+CREATE TABLE IF NOT EXISTS agent (
+    id BIGSERIAL PRIMARY KEY,
+    workflow_id BIGINT NOT NULL,
+    workflow_version INT NOT NULL,
+    name VARCHAR(100) NOT NULL,
+    type VARCHAR(20) NOT NULL,
+    status VARCHAR(20) DEFAULT 'INACTIVE',
+    config TEXT,
+    api_key VARCHAR(50),
+    webhook_url VARCHAR(255),
+    timeout_seconds INT DEFAULT 300,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
