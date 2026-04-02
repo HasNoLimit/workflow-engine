@@ -26,7 +26,7 @@ public interface WorkflowVersionMapper extends BaseMapper<WorkflowVersion> {
     default Optional<WorkflowVersion> findLatestByWorkflowId(Long workflowId) {
         return Optional.ofNullable(selectOne(new LambdaQueryWrapper<WorkflowVersion>()
             .eq(WorkflowVersion::getWorkflowId, workflowId)
-            .orderByDesc(WorkflowVersion::getVersionNumber)
+            .orderByDesc(WorkflowVersion::getVersion)
             .last("LIMIT 1")));
     }
 }
