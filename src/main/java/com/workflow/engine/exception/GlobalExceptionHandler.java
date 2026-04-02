@@ -111,6 +111,66 @@ public class GlobalExceptionHandler {
     }
 
     /**
+     * 处理 InvalidAgentTypeException 异常，返回 400 响应
+     * <p>
+     * 当智能体类型不符合操作要求时抛出
+     * </p>
+     *
+     * @param e InvalidAgentTypeException 异常
+     * @return 包含错误信息的 ResponseEntity
+     */
+    @ExceptionHandler(InvalidAgentTypeException.class)
+    public ResponseEntity<Map<String, Object>> handleInvalidAgentType(InvalidAgentTypeException e) {
+        log.warn("智能体类型无效: {}", e.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+            .body(Map.of(
+                "error", "INVALID_AGENT_TYPE",
+                "message", e.getMessage(),
+                "timestamp", LocalDateTime.now()
+            ));
+    }
+
+    /**
+     * 处理 AgentNotActiveException 异常，返回 400 响应
+     * <p>
+     * 当尝试执行未激活状态的智能体时抛出
+     * </p>
+     *
+     * @param e AgentNotActiveException 异常
+     * @return 包含错误信息的 ResponseEntity
+     */
+    @ExceptionHandler(AgentNotActiveException.class)
+    public ResponseEntity<Map<String, Object>> handleAgentNotActive(AgentNotActiveException e) {
+        log.warn("智能体未激活: {}", e.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+            .body(Map.of(
+                "error", "AGENT_NOT_ACTIVE",
+                "message", e.getMessage(),
+                "timestamp", LocalDateTime.now()
+            ));
+    }
+
+    /**
+     * 处理 InvalidApiKeyException 异常，返回 401 响应
+     * <p>
+     * 当调用 API 智能体时提供的 API Key 无效时抛出
+     * </p>
+     *
+     * @param e InvalidApiKeyException 异常
+     * @return 包含错误信息的 ResponseEntity
+     */
+    @ExceptionHandler(InvalidApiKeyException.class)
+    public ResponseEntity<Map<String, Object>> handleInvalidApiKey(InvalidApiKeyException e) {
+        log.warn("API Key 无效: {}", e.getMessage());
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+            .body(Map.of(
+                "error", "INVALID_API_KEY",
+                "message", e.getMessage(),
+                "timestamp", LocalDateTime.now()
+            ));
+    }
+
+    /**
      * Handles validation errors and returns 400 response.
      *
      * @param e the MethodArgumentNotValidException

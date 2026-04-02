@@ -35,3 +35,16 @@ CREATE TABLE IF NOT EXISTS agent (
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
+
+-- 工作流执行记录表
+CREATE TABLE IF NOT EXISTS workflow_execution (
+    id BIGSERIAL PRIMARY KEY,
+    workflow_id BIGINT NOT NULL,
+    agent_id BIGINT,
+    status VARCHAR(20) NOT NULL DEFAULT 'RUNNING',
+    input TEXT,
+    output TEXT,
+    started_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    completed_at TIMESTAMP,
+    duration_ms BIGINT
+);
