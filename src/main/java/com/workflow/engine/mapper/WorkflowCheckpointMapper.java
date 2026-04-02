@@ -22,4 +22,9 @@ public interface WorkflowCheckpointMapper extends BaseMapper<WorkflowCheckpoint>
             .eq(WorkflowCheckpoint::getThreadId, threadId)
             .orderByDesc(WorkflowCheckpoint::getCreatedAt));
     }
+
+    default List<WorkflowCheckpoint> findByExecutionId(Long executionId) {
+        return selectList(new LambdaQueryWrapper<WorkflowCheckpoint>()
+            .eq(WorkflowCheckpoint::getExecutionId, executionId));
+    }
 }

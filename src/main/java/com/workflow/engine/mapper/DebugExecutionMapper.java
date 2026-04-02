@@ -10,10 +10,8 @@ import java.util.List;
 @Mapper
 public interface DebugExecutionMapper extends BaseMapper<DebugExecution> {
 
-    default List<DebugExecution> findByWorkflowId(Long workflowId, int limit) {
+    default List<DebugExecution> findByWorkflowId(Long workflowId) {
         return selectList(new LambdaQueryWrapper<DebugExecution>()
-            .eq(DebugExecution::getWorkflowId, workflowId)
-            .orderByDesc(DebugExecution::getCreatedAt)
-            .last("LIMIT " + limit));
+            .eq(DebugExecution::getWorkflowId, workflowId));
     }
 }

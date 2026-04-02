@@ -6,6 +6,7 @@ import com.workflow.engine.model.WorkflowVersion;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
+import java.util.Optional;
 
 @Mapper
 public interface WorkflowVersionMapper extends BaseMapper<WorkflowVersion> {
@@ -20,5 +21,12 @@ public interface WorkflowVersionMapper extends BaseMapper<WorkflowVersion> {
         return selectList(new LambdaQueryWrapper<WorkflowVersion>()
             .eq(WorkflowVersion::getWorkflowId, workflowId)
             .orderByDesc(WorkflowVersion::getVersion));
+    }
+
+    default Optional<WorkflowVersion> findLatestByWorkflowId(Long workflowId) {
+        return Optional.ofNullable(selectOne(new LambdaQueryWrapper<WorkflowVersion>()
+            .eq(WorkflowVersion::getWorkflowId, workflowId)
+            .orderByDesc(WorkflowVersion::getVersionNumber)
+            .last("LIMIT 1")));
     }
 }
