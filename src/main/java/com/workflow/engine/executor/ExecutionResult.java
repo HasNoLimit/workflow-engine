@@ -46,7 +46,7 @@ public class ExecutionResult {
     public static ExecutionResult success(Map<String, Object> output, List<String> executionPath) {
         return ExecutionResult.builder()
                 .success(true)
-                .status(WorkflowState.STATUS_SUCCESS)
+                .status(WorkflowAgentState.STATUS_SUCCESS)
                 .output(output)
                 .executionPath(executionPath)
                 .build();
@@ -61,7 +61,7 @@ public class ExecutionResult {
     public static ExecutionResult failure(String errorMessage, List<String> executionPath) {
         return ExecutionResult.builder()
                 .success(false)
-                .status(WorkflowState.STATUS_FAILED)
+                .status(WorkflowAgentState.STATUS_FAILED)
                 .errorMessage(errorMessage)
                 .executionPath(executionPath)
                 .build();
