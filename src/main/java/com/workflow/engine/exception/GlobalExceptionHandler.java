@@ -71,6 +71,26 @@ public class GlobalExceptionHandler {
     }
 
     /**
+     * 处理 WorkflowExecutionException 异常，返回 500 响应
+     * <p>
+     * 用于工作流执行过程中的错误，如节点配置无效、执行超时等
+     * </p>
+     *
+     * @param e WorkflowExecutionException 异常
+     * @return 包含错误信息的 ResponseEntity
+     */
+    @ExceptionHandler(WorkflowExecutionException.class)
+    public ResponseEntity<Map<String, Object>> handleWorkflowExecution(WorkflowExecutionException e) {
+        log.error("工作流执行错误: {}", e.getMessage(), e);
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+            .body(Map.of(
+                "error", "WORKFLOW_EXECUTION_ERROR",
+                "message", e.getMessage(),
+                "timestamp", LocalDateTime.now()
+            ));
+    }
+
+    /**
      * 处理 IllegalStateException 异常，返回 400 响应
      * <p>
      * 用于业务规则验证失败的情况，如尝试删除活跃状态的智能体
