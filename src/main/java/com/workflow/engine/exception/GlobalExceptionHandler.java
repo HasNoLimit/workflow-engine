@@ -37,6 +37,23 @@ public class GlobalExceptionHandler {
     }
 
     /**
+     * 处理 WorkflowVersionNotFoundException 异常，返回 404 响应
+     *
+     * @param e WorkflowVersionNotFoundException 异常
+     * @return 包含错误信息的 ResponseEntity
+     */
+    @ExceptionHandler(WorkflowVersionNotFoundException.class)
+    public ResponseEntity<Map<String, Object>> handleWorkflowVersionNotFound(WorkflowVersionNotFoundException e) {
+        log.warn("工作流版本未找到: {}", e.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+            .body(Map.of(
+                "error", "WORKFLOW_VERSION_NOT_FOUND",
+                "message", e.getMessage(),
+                "timestamp", LocalDateTime.now()
+            ));
+    }
+
+    /**
      * Handles validation errors and returns 400 response.
      *
      * @param e the MethodArgumentNotValidException

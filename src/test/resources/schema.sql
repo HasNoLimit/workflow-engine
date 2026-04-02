@@ -9,3 +9,13 @@ CREATE TABLE IF NOT EXISTS workflow (
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
+
+-- 工作流版本表
+CREATE TABLE IF NOT EXISTS workflow_version (
+    id BIGSERIAL PRIMARY KEY,
+    workflow_id BIGINT NOT NULL,
+    version INTEGER NOT NULL,
+    canvas TEXT,
+    change_note VARCHAR(500),
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);

@@ -1,7 +1,16 @@
 package com.workflow.engine.engine.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import java.util.List;
 
+/**
+ * 工作流 JSON 数据模型
+ * <p>
+ * 表示 FlowGram.AI 画布的完整数据结构，包含节点和边
+ * </p>
+ */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public record WorkflowJSON(
     List<NodeJSON> nodes,
     List<EdgeJSON> edges
