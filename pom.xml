@@ -20,7 +20,7 @@
     <properties>
         <java.version>17</java.version>
         <langchain4j.version>1.12.2</langchain4j.version>
-        <langgraph4j.version>1.6.2</langgraph4j.version>
+        <langgraph4j.version>1.8.11</langgraph4j.version>
         <mybatis-plus.version>3.5.7</mybatis-plus.version>
     </properties>
 
@@ -74,7 +74,7 @@
         <!-- LangGraph4j -->
         <dependency>
             <groupId>org.bsc.langgraph4j</groupId>
-            <artifactId>langgraph4j-core-jdk8</artifactId>
+            <artifactId>langgraph4j-core</artifactId>
         </dependency>
 
         <!-- Database -->
