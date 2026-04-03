@@ -48,3 +48,28 @@ CREATE TABLE IF NOT EXISTS workflow_execution (
     completed_at TIMESTAMP,
     duration_ms BIGINT
 );
+
+-- LLM 提供商表
+CREATE TABLE IF NOT EXISTS llm_provider (
+    id BIGSERIAL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    provider_type VARCHAR(50) NOT NULL,
+    api_key VARCHAR(255),
+    base_url VARCHAR(255) NOT NULL,
+    timeout_seconds INT DEFAULT 60,
+    options TEXT,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+-- LLM 模型配置表
+CREATE TABLE IF NOT EXISTS llm_model (
+    id BIGSERIAL PRIMARY KEY,
+    provider_id BIGINT NOT NULL,
+    model_id VARCHAR(100) NOT NULL,
+    model_name VARCHAR(100) NOT NULL,
+    max_tokens INT,
+    input_price DECIMAL(10, 4),
+    output_price DECIMAL(10, 4),
+    capabilities TEXT,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);

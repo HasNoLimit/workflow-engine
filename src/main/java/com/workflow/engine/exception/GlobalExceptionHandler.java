@@ -171,6 +171,66 @@ public class GlobalExceptionHandler {
     }
 
     /**
+     * 处理 LlmProviderNotFoundException 异常，返回 404 响应
+     * <p>
+     * 当访问不存在的 LLM 提供商时抛出
+     * </p>
+     *
+     * @param e LlmProviderNotFoundException 异常
+     * @return 包含错误信息的 ResponseEntity
+     */
+    @ExceptionHandler(LlmProviderNotFoundException.class)
+    public ResponseEntity<Map<String, Object>> handleLlmProviderNotFound(LlmProviderNotFoundException e) {
+        log.warn("LLM 提供商未找到: {}", e.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+            .body(Map.of(
+                "error", "LLM_PROVIDER_NOT_FOUND",
+                "message", e.getMessage(),
+                "timestamp", LocalDateTime.now()
+            ));
+    }
+
+    /**
+     * 处理 LlmModelNotFoundException 异常，返回 404 响应
+     * <p>
+     * 当访问不存在的 LLM 模型配置时抛出
+     * </p>
+     *
+     * @param e LlmModelNotFoundException 异常
+     * @return 包含错误信息的 ResponseEntity
+     */
+    @ExceptionHandler(LlmModelNotFoundException.class)
+    public ResponseEntity<Map<String, Object>> handleLlmModelNotFound(LlmModelNotFoundException e) {
+        log.warn("LLM 模型未找到: {}", e.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+            .body(Map.of(
+                "error", "LLM_MODEL_NOT_FOUND",
+                "message", e.getMessage(),
+                "timestamp", LocalDateTime.now()
+            ));
+    }
+
+    /**
+     * 处理 UnsupportedProviderTypeException 异常，返回 400 响应
+     * <p>
+     * 当尝试创建不支持的 LLM 提供商类型时抛出
+     * </p>
+     *
+     * @param e UnsupportedProviderTypeException 异常
+     * @return 包含错误信息的 ResponseEntity
+     */
+    @ExceptionHandler(UnsupportedProviderTypeException.class)
+    public ResponseEntity<Map<String, Object>> handleUnsupportedProviderType(UnsupportedProviderTypeException e) {
+        log.warn("不支持的提供商类型: {}", e.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+            .body(Map.of(
+                "error", "UNSUPPORTED_PROVIDER_TYPE",
+                "message", e.getMessage(),
+                "timestamp", LocalDateTime.now()
+            ));
+    }
+
+    /**
      * Handles validation errors and returns 400 response.
      *
      * @param e the MethodArgumentNotValidException
